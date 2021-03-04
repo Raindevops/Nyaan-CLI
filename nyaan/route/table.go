@@ -3,24 +3,73 @@ package route
 import (
 	"flag"
 	"fmt"
+	"os"
 )
-
-// Args : List of available arguments from the command line
-var Args = [3]string{"create", "update", "delete"}
 
 // Table : route table for cli
 func Table() {
 
-	text := flag.String("text", "", "Text to parse. (Require)")
-	metric := flag.String("metric", "chars", "Metric {chars|words|line}")
-	unique := flag.Bool("unique", false, "Measure unique value of a metric")
+	// text := flag.String("text", "", "Text to parse.")
+	// metric := flag.String("metric", "chars", "Metric {chars|words|line}")
+	// unique := flag.Bool("unique", false, "Measure unique value of a metric")
 
-	flag.Parse()
+	// flag.Parse()
 
-	// if len(*text) == 0 {
-	// 	flag.PrintDefaults()
-	// 	os.Exit(1)
-	// }
+	// fmt.Printf("text: %s, metric: %s, unique: %t", *text, *metric, *unique)
 
-	fmt.Printf("text: %s, metric: %s, unique: %t", *text, *metric, *unique)
+	// Subcommands
+	countCommand := flag.NewFlagSet("count", flag.ExitOnError)
+
+	// Count subcommand flag pointers
+	// Adding a new choice for --metric of 'substring' and a new --substring flag
+	countTextPtr := countCommand.String("text", "", "Text to parse. (Required)")
+	countMetricPtr := countCommand.String("metric", "chars", "Metric {chars|words|lines|substring}. (Required)")
+	countSubstringPtr := countCommand.String("substring", "", "The substring to be counted. Required for --metric=substring")
+	countUniquePtr := countCommand.Bool("unique", false, "Measure unique values of a metric.")
+
+	// Verify that a subcommand has been provided
+	// os.Arg[0] is the main command
+	// os.Arg[1] will be the subcommand
+	if len(os.Args) < 2 {
+		fmt.Println("list or count subcommand is required")
+		os.Exit(1)
+	}
+
+	// Switch on the subcommand
+	// Parse the flags for appropriate FlagSet
+	// FlagSet.Parse() requires a set of arguments to parse as input
+	// os.Args[2:] will be all arguments starting after the subcommand at os.Args[1]
+	switch os.Args[1] {
+	case "count":
+		countCommand.Parse(os.Args[2:])
+	default:
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
+
+	// Check which subcommand was Parsed using the FlagSet.Parsed() function. Handle each case accordingly.
+	// FlagSet.Parse() will evaluate to false if no flags were parsed (i.e. the user did not provide any flags)
+
+	fmt.Println(countCommand.Parsed())
+
+	if countCommand.Parsed() {
+		// Required Flags
+		if *countTextPtr == "" {
+			countCommand.PrintDefaults()
+			os.Exit(1)
+		}
+		// If the metric flag is substring, the substring flag is required
+		if *countMetricPtr == "substring" && *countSubstringPtr == "" {
+			countCommand.PrintDefaults()
+			os.Exit(1)
+		}
+		//If the metric flag is not substring, the substring flag must not be used
+		if *countMetricPtr != "substring" && *countSubstringPtr != "" {
+			fmt.Println("--substring may only be used with --metric=substring.")
+			countCommand.PrintDefaults()
+			os.Exit(1)
+		}
+		//Print
+		fmt.Printf("textPtr: %s, metricPtr: %s, substringPtr: %v, uniquePtr: %t\n", *countTextPtr, *countMetricPtr, *countSubstringPtr, *countUniquePtr)
+	}
 }
