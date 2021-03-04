@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	route "gitlab.com/raindevops/nyaan-cli/nyaan/route"
 )
 
 func main() {
@@ -11,6 +13,5 @@ func main() {
 		fmt.Println("Helper command is called")
 		return
 	}
-
-	fmt.Println("Entrypoint")
+	route.Table()
 }
