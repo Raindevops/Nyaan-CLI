@@ -1,10 +1,24 @@
 package route
 
-import "flag"
+import (
+	"fmt"
+	"os"
+
+	project "gitlab.com/raindevops/nyaan-cli/nyaan/entities/project/cmd"
+)
 
 // Table : route table for cli
 func Table() {
-	create := flag.NewFlagSet("create", flag.ExitOnError)
-	typePtr := create.String("type", "", "The entity you want to create. project, issue...")
-	projectId := create.String("projet-id", "", "The unic identifier for the project ")
+	if len(os.Args) < 2 {
+		fmt.Println("--help command invokes")
+		return
+	}
+
+	switch os.Args[1] {
+	case "project":
+		project.RouteProject()
+	default:
+		fmt.Println("--help command invoked")
+		return
+	}
 }
