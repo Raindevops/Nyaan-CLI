@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+var (
+	// GitlabToken : Required Gitlab token use to interact with the Gitlab instance
+	GitlabToken, _ = os.LookupEnv("GitlabToken")
+)
+
 // GenerateCLI : Create new flagset for project's creation CLI
 func GenerateCLI() {
 	create := flag.NewFlagSet("create", flag.ExitOnError)
@@ -17,5 +22,5 @@ func GenerateCLI() {
 
 	create.Parse(os.Args[3:])
 	create.PrintDefaults()
-	fmt.Println(*name, *path, *description, *defaultBranch, *tags)
+	fmt.Println(*name, *path, *description, *defaultBranch, *tags, GitlabToken)
 }
