@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	project "gitlab.com/raindevops/nyaan-cli/nyaan/entities/project/cmd"
+	"gitlab.com/raindevops/nyaan-cli/nyaan/entities/project"
 )
 
 // Table : route table for cli
