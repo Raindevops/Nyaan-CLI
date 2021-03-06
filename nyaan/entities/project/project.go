@@ -5,6 +5,11 @@ import (
 	"os"
 )
 
+var (
+	// GitlabToken : Get from os env vars the required token to do http request with the gitlab instance
+	GitlabToken, _ = os.LookupEnv("GitlabToken")
+)
+
 // Project : data type in use in gitlab's Projects
 type Project struct {
 	Name          string

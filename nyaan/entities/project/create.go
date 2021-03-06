@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 var project Project
@@ -24,7 +25,24 @@ func CreateCLI() {
 		return
 	}
 
-	fmt.Println(*name, *desc, *tags, *path, *defBranch)
-	create.PrintDefaults()
+	if *name != "" {
+		project.setProjectName(*name)
+	}
+	if *desc != "" {
+		project.setProjectDesc(*desc)
+	}
+	if *path != "" {
+		project.setProjectPath(*path)
+	}
+	if *defBranch != "" {
+		project.setDefaultBranch(*defBranch)
+	}
+	if *tags != "" {
+		ar := strings.Split(*tags, ",")
+		for _, s := range ar {
+			project.setProjectTags(s)
+		}
+	}
 
+	fmt.Println(project)
 }
