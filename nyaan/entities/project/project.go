@@ -3,8 +3,6 @@ package project
 import (
 	"fmt"
 	"os"
-
-	projectcreate "gitlab.com/raindevops/nyaan-cli/nyaan/entities/project/cmd/create"
 )
 
 // Project : data type in use in gitlab's Projects
@@ -28,7 +26,7 @@ func RouteProject() {
 
 	switch os.Args[2] {
 	case "create":
-		projectcreate.GenerateCLI()
+		CreateCLI()
 	case "update":
 		fmt.Println("update project invoked")
 	case "delete":
