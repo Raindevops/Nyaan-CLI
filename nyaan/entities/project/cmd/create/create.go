@@ -3,6 +3,8 @@ package projectcreate
 import (
 	"flag"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 )
 
@@ -22,5 +24,25 @@ func GenerateCLI() {
 
 	create.Parse(os.Args[3:])
 	create.PrintDefaults()
-	fmt.Println(*name, *path, *description, *defaultBranch, *tags, GitlabToken)
+	fmt.Println(*name, *path, *description, *defaultBranch, *tags)
+	createProject()
+}
+
+func createProject() {
+	req, err := http.NewRequest("GET", "https://gitlab.com/api/v4/projects", nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	req.Header.Set("Private-Token", GitlabToken)
+
+	resp, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(resp.Body)
+	defer resp.Body.Close()
 }
