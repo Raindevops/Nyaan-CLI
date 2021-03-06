@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var project Project
+
 // CreateCLI : generate the CLI for the create function
 func CreateCLI() {
 	create := flag.NewFlagSet("create", flag.ExitOnError)

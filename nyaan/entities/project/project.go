@@ -38,3 +38,22 @@ func RouteProject() {
 		return
 	}
 }
+
+func (p *Project) setProjectName(s string) {
+	p.Name = s
+}
+func (p *Project) setProjectID(i uint) {
+	p.ID = i
+}
+func (p *Project) setProjectPath(s string) {
+	p.Path = s
+}
+func (p *Project) setProjectDesc(s string) {
+	p.Description = s
+}
+func (p *Project) setDefaultBranch(s string) {
+	p.Defaultbranch = s
+}
+func (p *Project) setProjectTags(s string) {
+	p.Tags = append(p.Tags, s)
+}
