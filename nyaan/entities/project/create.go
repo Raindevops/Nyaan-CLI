@@ -4,12 +4,14 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 )
 
 var project Project
 
 // CreateCLI : generate the CLI for the create function
+// TODO : refacto flag declaration & storage in structure
 func CreateCLI() {
 	create := flag.NewFlagSet("create", flag.ExitOnError)
 	name := create.String("name", "", "The name for the new project. (Required if no path set)")
@@ -43,6 +45,16 @@ func CreateCLI() {
 			project.setProjectTags(s)
 		}
 	}
+	CreateProject()
+}
 
-	fmt.Println(project)
+// CreateProject : Do an http request with the Project structure informations
+func CreateProject() {
+	f := reflect.ValueOf(project)
+
+	for i := 0; i < f.NumField(); i++ {
+		if !f.Field(i).IsZero() {
+			fmt.Println(f.Field(i).Interface())
+		}
+	}
 }

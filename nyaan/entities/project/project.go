@@ -8,16 +8,24 @@ import (
 var (
 	// GitlabToken : Get from os env vars the required token to do http request with the gitlab instance
 	GitlabToken, _ = os.LookupEnv("GitlabToken")
+	// GitlabURL : Get from os env vars the required gitlab instance's URL
+	GitlabURL, _ = os.LookupEnv("GitlabURL")
 )
+
+// QueryFields : type of fields use in URL query
+type QueryFields struct {
+	Name      string
+	Queryname string
+}
 
 // Project : data type in use in gitlab's Projects
 type Project struct {
-	Name          string
+	Name          QueryFields
 	ID            uint
-	Description   string
-	Tags          []string
-	Path          string
-	Defaultbranch string
+	Description   QueryFields
+	Tags          QueryFields
+	Path          QueryFields
+	Defaultbranch QueryFields
 }
 
 // RouteProject : entrypoint for the project command line
@@ -44,21 +52,33 @@ func RouteProject() {
 	}
 }
 
-func (p *Project) setProjectName(s string) {
-	p.Name = s
+func (p *Project) setProjectName(n, qn string) {
+	p.Name.Name = n
+	p.Name.Queryname = qn
 }
 func (p *Project) setProjectID(i uint) {
 	p.ID = i
 }
-func (p *Project) setProjectPath(s string) {
-	p.Path = s
+func (p *Project) setProjectPath(n, qn string) {
+	p.Path.Name = n
+	p.Path.Queryname = qn
 }
-func (p *Project) setProjectDesc(s string) {
-	p.Description = s
+func (p *Project) setProjectDesc(n, qn string) {
+	p.Description.Name = n
+	p.Description.Queryname = qn
 }
-func (p *Project) setDefaultBranch(s string) {
-	p.Defaultbranch = s
+func (p *Project) setDefaultBranch(n, qn string) {
+	p.Defaultbranch.Name = n
+	p.Defaultbranch.Queryname = qn
 }
-func (p *Project) setProjectTags(s string) {
-	p.Tags = append(p.Tags, s)
+func (p *Project) setProjectTags(n, qn string) {
+	p.Tags.Name = n
+	p.Tags.Queryname = qn
+}
+
+func (qf *QueryFields) setName(s string) {
+	qf.Name = s
+}
+func (qf *QueryFields) setQueryName(s string) {
+	qf.Queryname = s
 }
